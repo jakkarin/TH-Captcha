@@ -21,7 +21,7 @@ $config = array(
 ```
 ###### แก้ไขสีเส้น
 ```
-$line_color = imagecolorallocate($image, 240,240,240);
+$line_color = imagecolorallocate($image, 240,240,240); // rgb
 ```
 ###### แก้ไขสีตัวอักษร
 ```
