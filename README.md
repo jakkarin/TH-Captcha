@@ -6,6 +6,10 @@
 * PHP5 ขึ่นไป
 * PHP GD Extension
 
+## ความสามารถที่ผมใส่ลงไป
+* สามารถสุ่ม font จาก folder fonts [นามสุกลเป็น .ttf เท่านั้น]
+* สามารถสุ่มพื้นหลังจาก folder images [นามสกุลเป็น .jpg เท่านั้น]
+
 ###### การตั้งค่าทั้งหมดสามารถตั้งค่าได้ใน captcha.php
 ```
 $config = array(
@@ -19,10 +23,12 @@ $config = array(
 	'line_amount' => 3, // จำนวนเส้น
 );
 ```
+
 ###### แก้ไขสีเส้น
 ```
 $line_color = imagecolorallocate($image, 240,240,240); // rgb
 ```
+
 ###### แก้ไขสีตัวอักษร
 ```
 $text_color = imagecolorallocate($image, 255,255,255); // rgb
