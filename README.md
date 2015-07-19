@@ -19,3 +19,11 @@ $config = array(
 	'line_amount' => 3, // จำนวนเส้น
 );
 ```
+###### แก้ไขสีเส้น
+```
+$line_color = imagecolorallocate($image, 240,240,240);
+```
+###### แก้ไขสีตัวอักษร
+```
+$text_color = imagecolorallocate($image, 255,255,255); // rgb
+```
