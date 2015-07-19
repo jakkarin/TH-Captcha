@@ -24,11 +24,18 @@ $config = array(
 	'line_amount' => 3, // จำนวนเส้น
 );
 ```
-
 ###### แก้ไขสีเส้น
 ```
 $line_color = imagecolorallocate($image, 240,240,240); // rgb
 ```
+PHP manual : http://php.net/manual/en/function.imagecolorallocate.php
+
+###### แก้ไขตัวอักษร
+ภาพ [ไม่ต้องแก้ไข], ขนาดตัวอักษร, ความเอียง, ตำแหน่งจากขอบซ้าน[แกน x], ตำแหน่งจากบน[แกน y], สีตัวอักษร, ฟอนต์, ตัวอักษร
+```
+imagettftext($image, rand(28,38), rand(-20,20), 15+($i * 30), 50, $text_color, $font, $letter);
+```
+PHP manual : http://php.net/manual/en/function.imagettftext.php
 
 ###### แก้ไขสีตัวอักษร
 ```
