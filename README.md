@@ -6,7 +6,7 @@
 * PHP5 ขึ้นไป
 * PHP GD Extension
 
-## Demo
+#### Demo
 * http://pictures-animefree.tk/th-captcha/index.php
 
 #### ทำอะไรได้บ้าง ?
