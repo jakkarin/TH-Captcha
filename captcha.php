@@ -2,47 +2,15 @@
 session_start();
 
 $config = array(
-	'width' => 200,
-	'height' => 75,
+	'width' => 240,
+	'height' => 85,
 	'random_bg_position' => true,
 	'background' => true,
-	'lang' => 'th',
+	'lang' => 'en',
 	'line_size' => 2,
 	'line_enabled' => true,
-	'line_amount' => 3,
+	'line_amount' => 2,
 );
-// ค้นหาภาพทั้งหมด
-$images = @glob('images/*.jpg');
-// ค้นหา font ทั้งหมด
-$fonts = @glob('fonts/*.ttf');
-// สุ่มภาพมา 1 ภาพ จาก ทั้งหมด
-$i_rand = array_rand($images);
-// สุ่ม font มา 1 font จากทั้งหมด
-$f_rand = array_rand($fonts);
-// สร้าง ภาพขึ้นมา
-$image = imagecreatetruecolor($config['width'], $config['height']);
-// นำเข้าภาพจากที่สุ่มมา
-$image2 = @imagecreatefromjpeg($images[$i_rand]);
-
-if ($config['line_enabled']) {
-	// กำหนด สีของเส้น
-	$line_color = imagecolorallocate($image, 240,240,240);
-	// ทำให้เส้น smoooth ขึ้น
-	imageantialias($image, true);
-	// วาดเส้น
-	for ($i = 0; $i < $config['line_amount'];$i++) {
-		$y1 = rand() % 100;
-		$y2 = rand() % 100;
-		$x1 = 0;
-		$x2 = 200;
-		imageline($image, $x1, $y1 , $x2, $y2, $line_color);
-		if ($config['line_size'] > 1) {
-			for($l = 1; $l <= $config['line_size'];$l++) {
-				imageline($image, $x1, $y1+$l , $x2, $y2+$l, $line_color);
-			}
-		}
-	}	
-}
 
 switch ($config['lang']) {
 	case 'th':
@@ -54,35 +22,90 @@ switch ($config['lang']) {
 		break;
 }
 
-$letters = $characters;
-// กำหนดสีตัวอักษร
-$text_color = imagecolorallocate($image, 255,255,255);
-// เลือก font ที่สุ่มไว้แล้ว
-$font = $fonts[$f_rand];
-$cache = '';
-// เขียนตัวอักษร ทีละตัว
-for ($i = 0; $i< 6;$i++) {
-	$letter = $letters[array_rand($letters)];
-	$cache.= $letter;
-	imagettftext($image, rand(28,38), rand(-20,20), 15+($i * 30), 50, $text_color, $font, $letter);
-}
-// นำ รหัส เข้า session
-$_SESSION['captcha'] = strtolower($cache);
+$json = empty($_GET['json']) ? true : false;
 
-if ($config['background']) {
-	$sx = 0; $sy = 0;
-	// สำหรับภาพที่ขนาดไม่เท่ากับ captcha สุ่มตำแหน่ง ภาพพื้นหลัง
-	if ($config['random_bg_position']) {
-		$im = getimagesize($images[$i_rand]);
-		$sx = rand(0, $im['0'] - $config['width']);
-		$sy = rand(0, $im['1'] - $config['height']);
+if ($json === true) {
+	// ค้นหาภาพทั้งหมด
+	$images = @glob('images/*.jpg');
+	// ค้นหา font ทั้งหมด
+	$fonts = @glob('fonts/*.ttf');
+	// สุ่มภาพมา 1 ภาพ จาก ทั้งหมด
+	$i_rand = array_rand($images);
+	// สุ่ม font มา 1 font จากทั้งหมด
+	$f_rand = array_rand($fonts);
+	// สร้าง ภาพขึ้นมา
+	$image = imagecreatetruecolor($config['width'], $config['height']);
+	// นำเข้าภาพจากที่สุ่มมา
+	$image2 = @imagecreatefromjpeg($images[$i_rand]);
+
+	if ($config['line_enabled']) {
+		// กำหนด สีของเส้น
+		$line_color = imagecolorallocate($image, 240,240,240);
+		// ทำให้เส้น smoooth ขึ้น
+		if (function_exists('imageantialias')) {
+			imageantialias($image, true);
+		}
+		// วาดเส้น
+		for ($i = 0; $i < $config['line_amount'];$i++) {
+			$y1 = rand() % 100;
+			$y2 = rand() % 100;
+			$x1 = 0;
+			$x2 = $config['width'];
+			imageline($image, $x1, $y1 , $x2, $y2, $line_color);
+			if ($config['line_size'] > 1) {
+				for($l = 1; $l <= $config['line_size'];$l++) {
+					imageline($image, $x1, $y1+$l , $x2, $y2+$l, $line_color);
+				}
+			}
+		}	
 	}
-	// ตั้งพื้นหลังให้กับ captcha
-	imagecopymerge($image, $image2, 0, 0, rand(0,$sx), rand(0,$sy), $config['width'], $config['height'], 70);
+
+	$letters = $characters;
+	// กำหนดสีตัวอักษร
+	$text_color = imagecolorallocate($image, 255,255,255);
+	// เลือก font ที่สุ่มไว้แล้ว
+	$font = $fonts[$f_rand];
+	$cache = '';
+	// เขียนตัวอักษร ทีละตัว
+	for ($i = 0; $i< 6;$i++) {
+		$letter = $letters[array_rand($letters)];
+		$cache.= $letter;
+		imagettftext($image, rand(38,48), rand(-20,20), 15+($i * 35), 55, $text_color, $font, $letter);
+	}
+	// นำ รหัส เข้า session
+	$_SESSION['captcha'] = $cache;
+
+	if ($config['background']) {
+		$sx = 0; $sy = 0;
+		// สำหรับภาพที่ขนาดไม่เท่ากับ captcha สุ่มตำแหน่ง ภาพพื้นหลัง
+		if ($config['random_bg_position']) {
+			$im = getimagesize($images[$i_rand]);
+			$sx = rand(0, $im['0'] - $config['width']);
+			$sy = rand(0, $im['1'] - $config['height']);
+		}
+		// ตั้งพื้นหลังให้กับ captcha
+		imagecopymerge($image, $image2, 0, 0, rand(0,$sx), rand(0,$sy), $config['width'], $config['height'], 70);
+	}
+	ob_start();
+		imagejpeg($image);
+		imagedestroy($image);
+		$contents = ob_get_contents();
+	ob_end_clean();
+	echo $contents;
+} else {
+	if ( ! empty($_SESSION['captcha'])) {
+		$arr = array(
+			'0' => $_SESSION['captcha']
+		);
+		for ($i = 1; $i < 6;$i++) { 
+			$cache = '';
+			for ($j = 0; $j < 6;$j++) {
+				$letter = $characters[array_rand($characters)];
+				$cache.= $letter;
+			}
+			$arr[] = $cache;
+		}
+		shuffle($arr);
+		echo json_encode($arr);
+	}
 }
-ob_start();
-	imagepng($image);
-	imagedestroy($image);
-	$contents = ob_get_contents();
-ob_end_clean();
-echo $contents;
