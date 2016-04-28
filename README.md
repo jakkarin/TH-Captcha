@@ -6,9 +6,6 @@
 * PHP5 ขึ้นไป
 * PHP GD Extension
 
-#### Demo
-* http://pictures-animefree.tk/th-captcha/index.php
-
 #### ทำอะไรได้บ้าง ?
 * สามารถสุ่ม font จาก folder fonts [นามสุกลเป็น .ttf เท่านั้น]
 * สามารถสุ่มพื้นหลังจาก folder images [นามสกุลเป็น .jpg เท่านั้น]-T
